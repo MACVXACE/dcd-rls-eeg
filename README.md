@@ -93,7 +93,7 @@ All Stage 4 and Stage 5 analyses are exploratory, with unadjusted p-values.
 | `stage3_physionet_stdout.txt` | `40499c6e24f076ce…` |
 | `stage4_stdout.txt` | `efe9d4ba18c3991a…` |
 | `stage5_stdout.txt` | `b3d2a380bd56e0a1…` |
-| `main.tex` | `0dc703e61e8f4f9f…` |
+| `main.tex` | `b54cc4f795afe211…` |
 | `supplement.tex` | `cca9f67647011ac2…` |
 | `supplement.pdf` | `721ccdd1545293f4…` |
 | `physionet_tradeoff.pdf` | `73e41e79cb331a0f…` |

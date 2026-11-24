@@ -1,0 +1,139 @@
+=== STAGE 3 PHYSIONET BENCHMARK HEADER ===
+Start Time (UTC): 2026-11-16T16:58:12.142660+00:00
+Python: 3.13.17 | NumPy: 2.5.4 | SciPy: 1.18.1
+Frozen Part-A Parameters: fs=512 Hz, P=5 (62.5 ms), L_ax=16, Nu=4, Mb=16, H_int=16, gamma=0.125
+
+=== STAGE A HIGH-PASS FREQUENCY RESPONSE AT fs = 512 Hz ===
+  Target fc=0.16 Hz -> P_hp=9 (a=1-2^-9) | 0.5 Hz:  -0.41 dB,  +17.7 deg | 1.0 Hz:  -0.10 dB,   +9.1 deg | 2.0 Hz:  -0.02 dB,   +4.6 deg
+  Target fc=0.32 Hz -> P_hp=8 (a=1-2^-8) | 0.5 Hz:  -1.47 dB,  +32.5 deg | 1.0 Hz:  -0.40 dB,  +17.7 deg | 2.0 Hz:  -0.09 dB,   +9.1 deg
+  Target fc=0.64 Hz -> P_hp=7 (a=1-2^-7) | 0.5 Hz:  -4.17 dB,  +52.0 deg | 1.0 Hz:  -1.45 dB,  +32.6 deg | 2.0 Hz:  -0.39 dB,  +17.7 deg
+
+=== LOADING 23 WFDB RECORDS & VERIFYING F1-F5 SELF-CHECKS ===
+  eeg_1  | dur= 540.1s | F=4, R=4 | Total Artifact=240.03s | Intervals: [122890-> 245790: 60.01s], [368680-> 491581: 60.01s], [614471-> 737361: 60.00s], [860262-> 983152: 60.00s]
+  eeg_2  | dur= 480.1s | F=4, R=3 | Total Artifact=240.01s | Intervals: [122900-> 245790: 60.00s], [368691-> 491581: 60.00s], [614481-> 737372: 60.01s], [860272-> 983143: 60.00s]
+  eeg_3  | dur= 540.1s | F=4, R=4 | Total Artifact=240.03s | Intervals: [122900-> 245800: 60.01s], [368691-> 491581: 60.00s], [614471-> 737372: 60.01s], [860262-> 983162: 60.01s]
+  eeg_4  | dur= 540.6s | F=4, R=5 | Total Artifact=240.02s | Intervals: [129187-> 252078: 60.01s], [374978-> 497868: 60.00s], [620769-> 743659: 60.00s], [866560-> 989460: 60.01s]
+  eeg_5  | dur= 480.1s | F=4, R=3 | Total Artifact=240.01s | Intervals: [122941-> 245831: 60.00s], [368732-> 491622: 60.00s], [614522-> 737413: 60.01s], [860313-> 983184: 60.00s]
+  eeg_6  | dur= 480.1s | F=4, R=3 | Total Artifact=240.03s | Intervals: [122890-> 245790: 60.01s], [368680-> 491581: 60.01s], [614471-> 737372: 60.01s], [860262-> 983143: 60.00s]
+  eeg_7  | dur= 540.1s | F=4, R=4 | Total Artifact=240.03s | Intervals: [122900-> 245790: 60.00s], [368691-> 491581: 60.00s], [614481-> 737382: 60.01s], [860272-> 983173: 60.01s]
+  eeg_8  | dur= 480.1s | F=4, R=3 | Total Artifact=240.02s | Intervals: [122900-> 245790: 60.00s], [368691-> 491581: 60.00s], [614481-> 737372: 60.01s], [860272-> 983153: 60.00s]
+  eeg_9  | dur= 540.1s | F=4, R=4 | Total Artifact=240.01s | Intervals: [122890-> 245790: 60.01s], [368691-> 491581: 60.00s], [614481-> 737351: 60.00s], [860272-> 983162: 60.00s]
+  eeg_10 | dur= 480.1s | F=4, R=3 | Total Artifact=240.02s | Intervals: [122900-> 245790: 60.00s], [368691-> 491581: 60.00s], [614481-> 737372: 60.01s], [860272-> 983153: 60.00s]
+  eeg_11 | dur= 480.1s | F=4, R=3 | Total Artifact=240.02s | Intervals: [122890-> 245790: 60.01s], [368691-> 491581: 60.00s], [614481-> 737372: 60.01s], [860272-> 983143: 60.00s]
+  eeg_12 | dur= 480.1s | F=4, R=3 | Total Artifact=240.08s | Intervals: [122910-> 245831: 60.02s], [368721-> 491642: 60.02s], [614574-> 737505: 60.02s], [860405-> 983317: 60.02s]
+  eeg_13 | dur= 540.1s | F=4, R=4 | Total Artifact=240.04s | Intervals: [122890-> 245790: 60.01s], [368680-> 491581: 60.01s], [614492-> 737392: 60.01s], [860282-> 983193: 60.02s]
+  eeg_14 | dur= 540.1s | F=4, R=4 | Total Artifact=240.02s | Intervals: [122890-> 245790: 60.01s], [368680-> 491571: 60.01s], [614471-> 737361: 60.00s], [860262-> 983152: 60.00s]
+  eeg_15 | dur= 540.1s | F=4, R=4 | Total Artifact=240.05s | Intervals: [122890-> 245790: 60.01s], [368680-> 491622: 60.03s], [614512-> 737402: 60.00s], [860303-> 983193: 60.00s]
+  eeg_16 | dur= 540.1s | F=4, R=4 | Total Artifact=240.03s | Intervals: [122920-> 245800: 60.00s], [368701-> 491591: 60.00s], [614522-> 737443: 60.02s], [860375-> 983265: 60.00s]
+  eeg_17 | dur= 540.1s | F=4, R=4 | Total Artifact=240.02s | Intervals: [122900-> 245790: 60.00s], [368680-> 491581: 60.01s], [614471-> 737361: 60.00s], [860262-> 983152: 60.00s]
+  eeg_18 | dur= 540.2s | F=4, R=4 | Total Artifact=240.04s | Intervals: [122900-> 245790: 60.00s], [368680-> 491581: 60.01s], [614471-> 737361: 60.00s], [860262-> 983173: 60.02s]
+  eeg_19 | dur= 540.1s | F=4, R=4 | Total Artifact=240.06s | Intervals: [122890-> 245780: 60.00s], [368680-> 491591: 60.02s], [614481-> 737382: 60.01s], [860272-> 983203: 60.02s]
+  eeg_20 | dur= 540.1s | F=4, R=5 | Total Artifact=240.02s | Intervals: [129177-> 252067: 60.00s], [374968-> 497858: 60.00s], [620759-> 743649: 60.00s], [866549-> 989440: 60.01s]
+  [F5 AUDIT eeg_20] ACC_x1 range=[-8.1660, 8.4910], zero_diff_frac=22.07%, rail_frac=0.000%, art/clean_RMS_ratio=0.50x (ACC_y1/z1 active; eeg_20 retained in 23-record set and also reported in 22-record sensitivity set).
+  eeg_21 | dur= 540.2s | F=4, R=4 | Total Artifact=240.04s | Intervals: [122890-> 245790: 60.01s], [368680-> 491581: 60.01s], [614471-> 737372: 60.01s], [860262-> 983152: 60.00s]
+  eeg_22 | dur= 540.1s | F=4, R=4 | Total Artifact=240.03s | Intervals: [122890-> 245790: 60.01s], [368680-> 491581: 60.01s], [614471-> 737361: 60.00s], [860262-> 983152: 60.00s]
+  eeg_23 | dur= 540.1s | F=4, R=4 | Total Artifact=240.02s | Intervals: [122900-> 245790: 60.00s], [368691-> 491581: 60.00s], [614481-> 737372: 60.01s], [860272-> 983162: 60.00s]
+  [SELF-CHECK] Multi-channel block-shift R_q30 update bit-identical to full outer-product: PASS
+
+=== TUNING GRIDS (scored per record; selection is leave-one-record-out) ===
+  eeg_1: grids done, input clipping clean/artifact = 0.000/0.020 % (123 s)
+  eeg_2: grids done, input clipping clean/artifact = 0.000/0.028 % (234 s)
+  eeg_3: grids done, input clipping clean/artifact = 0.000/0.033 % (350 s)
+  eeg_4: grids done, input clipping clean/artifact = 0.000/0.011 % (468 s)
+  eeg_5: grids done, input clipping clean/artifact = 0.000/0.004 % (572 s)
+  eeg_6: grids done, input clipping clean/artifact = 0.000/0.006 % (676 s)
+  eeg_7: grids done, input clipping clean/artifact = 0.000/0.006 % (797 s)
+  eeg_8: grids done, input clipping clean/artifact = 0.000/0.015 % (901 s)
+  eeg_9: grids done, input clipping clean/artifact = 0.000/0.011 % (1017 s)
+  eeg_10: grids done, input clipping clean/artifact = 0.000/0.040 % (1123 s)
+  eeg_11: grids done, input clipping clean/artifact = 0.000/0.032 % (1229 s)
+  eeg_12: grids done, input clipping clean/artifact = 0.000/0.029 % (1336 s)
+  eeg_13: grids done, input clipping clean/artifact = 0.000/0.032 % (1454 s)
+  eeg_14: grids done, input clipping clean/artifact = 0.000/0.027 % (1574 s)
+  eeg_15: grids done, input clipping clean/artifact = 0.000/0.061 % (1692 s)
+  eeg_16: grids done, input clipping clean/artifact = 0.000/0.007 % (1809 s)
+  eeg_17: grids done, input clipping clean/artifact = 0.000/0.002 % (1926 s)
+  eeg_18: grids done, input clipping clean/artifact = 0.000/0.006 % (2052 s)
+  eeg_19: grids done, input clipping clean/artifact = 0.000/0.008 % (2170 s)
+  eeg_20: grids done, input clipping clean/artifact = 0.000/0.004 % (2297 s)
+  eeg_21: grids done, input clipping clean/artifact = 0.000/0.028 % (2419 s)
+  eeg_22: grids done, input clipping clean/artifact = 0.000/0.002 % (2540 s)
+  eeg_23: grids done, input clipping clean/artifact = 0.000/0.011 % (2662 s)
+  LORO mu, NLMS on RefA_ACC1_3ax: 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05
+  LORO mu, NLMS on RefC_DiffVelPos_9ax: 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05
+  LORO P, DCD (selected on RefA, used for RefA/RefB/RefC): 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11
+
+=== PER-RECORD RESULTS (fc = 0.64 Hz; dSNR in dB over the 60-s blocks; NONE = EEG2 unprocessed) ===
+  Record | P | DCD_RefA | DCD_RefB | DCD_RefC | NLMS_RefA | NLMS_RefC | DCD_RefA_P5 | DCD_RefA_P7 | DCD_RefA_P9 | DCD_RefA_P11 | clean RRMSE NONE/DCD_A/NLMS_A
+  eeg_1  | 11 |  +0.55 |  +0.52 |  +1.95 |  +1.29 |  +2.78 |  -0.17 |  +0.92 |  +0.94 |  +0.55 | 0.287/0.304/0.392 (2764 s)
+  eeg_2  | 11 |  +1.39 |  +1.41 |  +2.72 |  +0.76 |  +7.80 |  +2.13 |  +2.49 |  +1.83 |  +1.39 | 0.315/0.337/0.466 (2855 s)
+  eeg_3  | 11 |  +1.44 |  +1.46 |  +2.79 |  +4.99 |  +7.81 |  +5.85 |  +3.92 |  +2.24 |  +1.44 | 0.412/0.417/0.518 (2956 s)
+  eeg_4  | 11 |  +0.33 |  +0.36 |  +1.42 |  +2.18 |  +4.80 |  +2.63 |  +1.51 |  +0.74 |  +0.33 | 0.353/0.371/0.477 (3072 s)
+  eeg_5  | 11 |  +2.66 |  +2.63 |  +4.80 |  +6.41 | +10.26 |  +7.33 |  +5.70 |  +3.80 |  +2.66 | 0.271/0.290/0.378 (3171 s)
+  eeg_6  | 11 |  +1.64 |  +1.67 |  +4.63 |  +3.68 | +11.37 |  +5.28 |  +3.31 |  +2.12 |  +1.64 | 0.329/0.345/0.447 (3265 s)
+  eeg_7  | 11 |  +1.32 |  +1.27 |  +4.06 |  +4.09 |  +9.05 |  +5.27 |  +3.08 |  +1.78 |  +1.32 | 0.202/0.229/0.349 (3370 s)
+  eeg_8  | 11 |  +1.65 |  +1.63 |  +3.51 |  +3.75 |  +9.15 |  +6.04 |  +3.63 |  +2.16 |  +1.65 | 0.382/0.396/0.480 (3468 s)
+  eeg_9  | 11 |  +2.00 |  +1.92 |  +3.35 |  +5.11 | +10.04 |  +6.29 |  +4.22 |  +2.53 |  +2.00 | 0.423/0.440/0.508 (3576 s)
+  eeg_10 | 11 |  +0.95 |  +0.95 |  +2.66 |  +3.33 |  +7.67 |  +4.45 |  +2.97 |  +1.51 |  +0.95 | 0.782/0.778/0.805 (3666 s)
+  eeg_11 | 11 |  +0.57 |  +0.53 |  +2.71 |  +2.62 |  +7.37 |  +4.83 |  +2.44 |  +1.10 |  +0.57 | 0.372/0.388/0.471 (3758 s)
+  eeg_12 | 11 |  +0.80 |  +0.83 |  +2.00 |  +3.22 |  +6.95 |  +3.93 |  +2.63 |  +1.40 |  +0.80 | 0.592/0.602/0.655 (3849 s)
+  eeg_13 | 11 |  +0.54 |  +0.51 |  +1.48 |  +1.54 |  +9.43 |  +3.64 |  +1.66 |  +0.92 |  +0.54 | 0.414/0.431/0.497 (3951 s)
+  eeg_14 | 11 |  +3.11 |  +3.08 |  +4.97 |  +5.08 | +13.06 |  +6.81 |  +5.14 |  +3.67 |  +3.11 | 0.505/0.515/0.567 (4054 s)
+  eeg_15 | 11 |  +2.23 |  +2.25 |  +4.46 |  +4.09 | +11.75 |  +6.16 |  +3.89 |  +2.74 |  +2.23 | 0.436/0.448/0.529 (4162 s)
+  eeg_16 | 11 |  +0.94 |  +0.93 |  +3.57 |  +3.48 |  +8.88 |  +4.73 |  +2.22 |  +1.20 |  +0.94 | 0.407/0.422/0.497 (4270 s)
+  eeg_17 | 11 |  +0.97 |  +0.95 |  +3.82 |  +4.10 |  +9.35 |  +3.91 |  +2.28 |  +1.33 |  +0.97 | 0.430/0.445/0.543 (4374 s)
+  eeg_18 | 11 |  +2.22 |  +2.18 |  +4.84 |  +4.00 |  +9.47 |  +4.46 |  +3.59 |  +2.66 |  +2.22 | 0.595/0.610/0.657 (4481 s)
+  eeg_19 | 11 |  +2.37 |  +2.35 |  +4.70 |  +4.48 |  +8.77 |  +4.75 |  +3.68 |  +2.80 |  +2.37 | 0.412/0.439/0.514 (4589 s)
+  eeg_20 | 11 |  +0.71 |  +0.69 |  +0.97 |  +3.71 |  +2.52 |  +4.14 |  +2.85 |  +1.52 |  +0.71 | 0.770/0.774/0.802 (4694 s)
+  eeg_21 | 11 |  +0.85 |  +0.84 |  +2.28 |  +2.21 |  +5.77 |  +3.45 |  +2.20 |  +1.31 |  +0.85 | 0.891/0.892/0.906 (4817 s)
+  eeg_22 | 11 |  +1.15 |  +1.05 |  +2.67 |  +4.82 |  +9.31 |  +6.46 |  +3.76 |  +1.90 |  +1.15 | 0.542/0.552/0.607 (4933 s)
+  eeg_23 | 11 |  +1.10 |  +1.06 |  +3.28 |  +3.54 |  +8.78 |  +4.91 |  +3.05 |  +1.73 |  +1.10 | 0.551/0.562/0.618 (5042 s)
+
+=== AGGREGATE (N = 23): ALL RECORDS - medians over records ===
+  Method       | dSNR blocks | CorrImp % | dSNR active | dSNR clean | dSNR record always-on | dSNR record gated | clean RRMSE (minus NONE)
+  NONE         |  +0.00 dB |     0.0 |  +0.00 dB |  +0.00 dB |  +0.00 dB |  +0.00 dB | 0.414 (+0.0000)
+  DCD_RefA     |  +1.15 dB |     6.2 |  +1.35 dB |  -0.31 dB |  +1.12 dB |  +1.12 dB | 0.439 (+0.0145)
+  DCD_RefB     |  +1.06 dB |     6.1 |  +1.31 dB |  -0.26 dB |  +1.02 dB |  +1.03 dB | 0.426 (+0.0125)
+  DCD_RefC     |  +3.28 dB |    14.9 |  +3.62 dB |  -0.76 dB |  +3.11 dB |  +3.16 dB | 0.454 (+0.0443)
+  NLMS_RefA    |  +3.71 dB |    13.4 |  +4.14 dB |  -1.75 dB |  +3.55 dB |  +3.62 dB | 0.514 (+0.0932)
+  NLMS_RefC    |  +8.88 dB |    32.5 |  +9.82 dB |  -3.50 dB |  +7.82 dB |  +8.45 dB | 0.620 (+0.2204)
+  DCD_RefA_P5  |  +4.75 dB |    11.5 |  +5.70 dB |  -5.33 dB |  +4.11 dB |  +4.59 dB | 0.760 (+0.3400)
+  DCD_RefA_P7  |  +3.05 dB |    11.6 |  +3.58 dB |  -2.83 dB |  +2.84 dB |  +2.93 dB | 0.573 (+0.1547)
+  DCD_RefA_P9  |  +1.78 dB |     8.4 |  +2.01 dB |  -0.99 dB |  +1.71 dB |  +1.78 dB | 0.475 (+0.0488)
+  DCD_RefA_P11 |  +1.15 dB |     6.2 |  +1.35 dB |  -0.31 dB |  +1.12 dB |  +1.12 dB | 0.439 (+0.0145)
+
+  --- PRE-REGISTERED TESTS (N = 23, paired over records, two-sided Wilcoxon, bootstrap 95% CI of the median) ---
+  PRIMARY P1  dSNR(blocks) DCD_RefA - NLMS_RefA: median -2.116 dB [-2.535, -1.971], p = 4.768e-07, n = 23
+  PRIMARY P2  clean-epoch RRMSE DCD_RefA - NONE (non-inferiority, margin +0.02): median +0.0145 [+0.0107, +0.0165], p = 7.153e-07 -> PASS
+  SECONDARY   dSNR(blocks) DCD_RefC - NLMS_RefC: median -5.075 dB [-5.527, -4.954], p = 2.384e-07 (unadjusted)
+  SECONDARY   dSNR(blocks) DCD_RefA_P5 - NLMS_RefA: median +1.180 dB [+0.862, +1.369], p = 4.935e-05 (unadjusted)
+  SECONDARY   dSNR(blocks) DCD_RefA - DCD_RefB: median +0.020 dB [+0.000, +0.036], p = 2.137e-02 (unadjusted)
+  SECONDARY   dSNR(blocks) DCD_RefA - DCD_RefC: median -1.859 dB [-2.176, -1.408], p = 2.384e-07 (unadjusted)
+
+=== AGGREGATE (N = 22): EXCLUDING eeg_20 (F5 sensitivity) - medians over records ===
+  Method       | dSNR blocks | CorrImp % | dSNR active | dSNR clean | dSNR record always-on | dSNR record gated | clean RRMSE (minus NONE)
+  NONE         |  +0.00 dB |     0.0 |  +0.00 dB |  +0.00 dB |  +0.00 dB |  +0.00 dB | 0.413 (+0.0000)
+  DCD_RefA     |  +1.24 dB |     6.2 |  +1.41 dB |  -0.31 dB |  +1.21 dB |  +1.22 dB | 0.435 (+0.0146)
+  DCD_RefB     |  +1.16 dB |     6.1 |  +1.36 dB |  -0.26 dB |  +1.14 dB |  +1.14 dB | 0.425 (+0.0126)
+  DCD_RefC     |  +3.32 dB |    15.5 |  +3.66 dB |  -0.80 dB |  +3.20 dB |  +3.23 dB | 0.454 (+0.0444)
+  NLMS_RefA    |  +3.71 dB |    13.0 |  +4.13 dB |  -1.84 dB |  +3.61 dB |  +3.67 dB | 0.511 (+0.0954)
+  NLMS_RefC    |  +8.97 dB |    32.9 |  +9.89 dB |  -3.55 dB |  +7.83 dB |  +8.52 dB | 0.618 (+0.2220)
+  DCD_RefA_P5  |  +4.79 dB |    11.4 |  +5.69 dB |  -5.33 dB |  +4.24 dB |  +4.64 dB | 0.760 (+0.3424)
+  DCD_RefA_P7  |  +3.06 dB |    11.5 |  +3.43 dB |  -2.83 dB |  +2.89 dB |  +3.00 dB | 0.571 (+0.1552)
+  DCD_RefA_P9  |  +1.81 dB |     8.6 |  +1.98 dB |  -1.02 dB |  +1.73 dB |  +1.78 dB | 0.470 (+0.0500)
+  DCD_RefA_P11 |  +1.24 dB |     6.2 |  +1.41 dB |  -0.31 dB |  +1.21 dB |  +1.22 dB | 0.435 (+0.0146)
+
+  --- PRE-REGISTERED TESTS (N = 22, paired over records, two-sided Wilcoxon, bootstrap 95% CI of the median) ---
+  PRIMARY P1  dSNR(blocks) DCD_RefA - NLMS_RefA: median -2.105 dB [-2.535, -1.918], p = 9.537e-07, n = 22
+  PRIMARY P2  clean-epoch RRMSE DCD_RefA - NONE (non-inferiority, margin +0.02): median +0.0146 [+0.0107, +0.0170], p = 1.431e-06 -> PASS
+  SECONDARY   dSNR(blocks) DCD_RefC - NLMS_RefC: median -5.195 dB [-5.633, -4.954], p = 4.768e-07 (unadjusted)
+  SECONDARY   dSNR(blocks) DCD_RefA_P5 - NLMS_RefA: median +1.211 dB [+0.862, +1.504], p = 8.059e-05 (unadjusted)
+  SECONDARY   dSNR(blocks) DCD_RefA - DCD_RefB: median +0.023 dB [+0.000, +0.037], p = 2.514e-02 (unadjusted)
+  SECONDARY   dSNR(blocks) DCD_RefA - DCD_RefC: median -1.860 dB [-2.233, -1.421], p = 4.768e-07 (unadjusted)
+
+=== STAGE A CUTOFF SWEEP (0.16, 0.32, 0.64 Hz) FOR DCD_RefA AT THE LORO P (SECONDARY) ===
+  fc=0.16 Hz (P_hp=9) | median dSNR(blocks) = +0.45 dB | median CorrImp =   2.0% | median clean RRMSE = 0.606
+  fc=0.32 Hz (P_hp=8) | median dSNR(blocks) = +0.76 dB | median CorrImp =   4.4% | median clean RRMSE = 0.500
+  fc=0.64 Hz (P_hp=7) | median dSNR(blocks) = +1.15 dB | median CorrImp =   6.2% | median clean RRMSE = 0.439
+
+End Time (UTC): 2026-11-16T18:53:00.974614+00:00 | evaluation elapsed 6865 s

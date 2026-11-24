@@ -1,0 +1,27 @@
+# Python
+__pycache__/
+*.pyc
+
+# macOS
+.DS_Store
+
+# LaTeX build files
+*.aux
+*.log
+*.out
+*.synctex.gz
+*.bbl
+*.blg
+
+# Raw datasets (download separately; see README)
+motion_artifact_data/
+eegdenoisenet/
+*.npy
+*.dat
+*.hea
+*.trigger
+
+# Stage 4 resume caches
+stage4_cache_full.json
+stage4_cache_quick.json
+stage4_cache_*.json.tmp

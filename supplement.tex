@@ -1,0 +1,650 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+  9pt,
+]{article}
+\usepackage{amsmath,amssymb}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+  \setmainfont[]{DejaVu Serif}
+  \setmonofont[]{DejaVu Sans Mono}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\usepackage[margin=0.8in]{geometry}
+\usepackage{longtable,booktabs,array}
+\usepackage{calc} % for calculating minipage widths
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  pdftitle={Supplementary Material: Fixed-Point Ridge DCD-RLS Adaptive Filtering for Wearable EEG},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\title{Supplementary Material: Fixed-Point Ridge DCD-RLS Adaptive
+Filtering for Wearable EEG}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle
+
+All tags refer to files in the code and data archive. stage2 =
+\texttt{stage2\_round6\_ridge\_stdout.txt}; stage3 =
+\texttt{stage3\_physionet\_stdout.txt}; stage4 =
+\texttt{stage4\_stdout.txt}; stage5 = \texttt{stage5\_stdout.txt}.
+
+\hypertarget{s1.-full-methods-with-code-provenance}{%
+\section{S1. Full Methods with code
+provenance}\label{s1.-full-methods-with-code-provenance}}
+
+Tag key: - \textbf{R4} = \texttt{stage2\_round4\_benchmark.py} -
+\textbf{S2c} = \texttt{stage2\_round6\_ridge\_benchmark.py} -
+\textbf{S2o} = \texttt{stage2\_round6\_ridge\_stdout.txt} - \textbf{V2}
+= \texttt{stage3\_physionet\_benchmark\_auditfix\_v2.py} - \textbf{S3o}
+= \texttt{stage3\_physionet\_stdout.txt} - \textbf{S4} =
+\texttt{stage4\_physionet\_diagnostics\_auditfix.py} /
+\texttt{stage4\_stdout.txt}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+Throughout, ``pre-specified'' means that hypotheses, metrics and pass
+rules were fixed in code before the evaluation runs reported here. Two
+deviations are disclosed.
+
+First, the Stage 2 held-out epochs had also been used in earlier
+development rounds: self-check T3 reproduces held-out values from those
+rounds {[}S2o:16{]}. The Stage 2 test set is therefore not untouched.
+
+Second, in Stage 3 the DCD memory grid was extended from \{5, 7, 9\} to
+\{5, 7, 9, 11\}. This followed a pre-declared grid-edge rule, after a
+4-record quick run selected the grid top on all four records
+{[}V2:479{]}. The 23-record run used the extended grid.
+
+\hypertarget{a.-filter}{%
+\subsection{A. Filter}\label{a.-filter}}
+
+\textbf{Stage A} is a first-order DC blocker:
+
+y{[}k{]} = x{[}k{]} − x{[}k−1{]} + (1 − 2\^{}−P\_hp)·y{[}k−1{]}, with
+P\_hp = round(log₂(f\_s/(2π f\_c))) {[}V2:60--72{]}.
+
+f\_c = 0.64 Hz gives P\_hp = 7 at 512 Hz {[}S3o:9{]}.
+
+\textbf{Stage B} scales and rounds the primary input d and each
+reference channel to Q15. Taps are stacked per channel, L\_ax taps each
+{[}V2:260, 295--312{]}. The a-priori output and error are
+
+ŷ = (wᵀu) \textgreater\textgreater{} 15, e = d − ŷ {[}V2:338--340{]}.
+
+R and r are held at Q30. Exponential forgetting λ = 1 − 2\^{}−P is
+applied by right shift:
+
+\begin{itemize}
+\tightlist
+\item
+  R ← R − (R \textgreater\textgreater{} P) + uuᵀ;
+\item
+  r ← r − (r \textgreater\textgreater{} P) + e·u − ((δ
+  \textgreater\textgreater{} P)·w) \textgreater\textgreater{} 15, where
+  δ = γ·var(u)·2\textsuperscript{P·2}30 {[}V2:326, 350--356{]}.
+\end{itemize}
+
+The leakage term implements a persistent ridge penalty δ‖w‖², as in
+DCD-RLS with ridge-regression penalties {[}Zakharov \& Nascimento
+2013{]}.
+
+The leading-element DCD solver makes at most N\_u = 4 coordinate updates
+per sample over M\_b = 16 bit levels, with amplitude bound H = 16
+{[}V2:281--283, 360--368{]}. It uses only shifts, additions and
+comparisons.
+
+\textbf{Multichannel update.} Because each channel is a tapped delay
+line, each sample changes only the M leading columns of R. The remaining
+blocks are shifted {[}V2:344--348{]}. This block-shift update was
+bit-identical to the full outer-product update {[}S3o:36{]}.
+
+\textbf{Initialisation} differs between stages: - Stage 2 starts from R₀
+= max(round(var(u)·2\^{}30), 1)·I {[}S2c:184--185{]}. - Stage 3 starts
+from R₀ = 0; the persistent load δ keeps the system solvable
+{[}V2:321{]}.
+
+\hypertarget{b.-input-scaling}{%
+\subsection{B. Input scaling}\label{b.-input-scaling}}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Stage 2 primary runs} scaled each epoch by its own
+  max\textbar x\textbar·1.05 {[}S2c:159, 163{]}. This is not causal.
+  Causal validation-set scaling (99.9th percentile × 1.05) changed
+  held-out post-switch RRMSE by at most +0.017 {[}S2o:356{]}.
+\item
+  \textbf{Stage 3} scaled each record by the 99.9th percentile of
+  \textbar x\textbar{} over samples {[}1024, first artifact onset), ×
+  1.05 × 16 headroom {[}V2:36--37, 295, 307{]}. This skips the first 2
+  s. Input clipping was at most 0.061\% of artifact samples
+  {[}S3o:39--61{]}.
+\end{itemize}
+
+\hypertarget{c.-complexity-and-word-lengths}{%
+\subsection{C. Complexity and word
+lengths}\label{c.-complexity-and-word-lengths}}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Single channel, L = 16:} plain DCD-RLS uses 48 multiplies and
+  at most 228 additions/comparisons per sample; ridge DCD-RLS uses 64
+  multiplies and at most 248 {[}S2o:300{]}.
+\item
+  \textbf{48-tap RefA filter, as implemented:} 288 multiplies per
+  sample. That is 48 (output) + 144 (block-shift R) + 48 (e·u) + 48
+  (leakage) {[}V2:338, 346, 355--356{]}.
+\item
+  \textbf{Observed peak signed widths in Stage 2:} R 35 bits; r 31--32
+  bits; w 18 bits with ridge vs 22 bits without {[}S2o:297, 299{]}.
+\end{itemize}
+
+\hypertarget{d.-stage-2-semi-synthetic-benchmark}{%
+\subsection{D. Stage 2: semi-synthetic
+benchmark}\label{d.-stage-2-semi-synthetic-benchmark}}
+
+\textbf{Data.} EEGdenoiseNet EEG and EMG epochs {[}Zhang 2021{]} were
+upsampled 2× to 512 Hz (1024 samples, 2 s) and z-scored per epoch
+{[}R4:76--77, 279--282{]}. Validation sets of 50 EEG and 50 EMG epochs
+were disjoint from held-out sets of 100 each, drawn with fixed seeds
+{[}S2c:97--103; S2o:12{]}.
+
+\textbf{Artifact.} EMG was passed through a third-order Butterworth
+band-pass of 5--100 Hz for the first 512 samples. From sample 512 it was
+replaced by −0.8× a 12--75 Hz band-pass {[}R4:290--291; S2c:294--296{]}.
+The result was scaled to input SNR ∈ \{−7, −1, +2\} dB. The reference
+was the raw EMG plus white noise at 1\%, 10\% or 31.6\% of its RMS
+{[}S2c:297--299{]}. With P ∈ \{4, 5\} this gives 18 cells, all with L =
+16.
+
+\textbf{Methods compared.}
+
+\begin{longtable}[]{@{}ll@{}}
+\toprule\noalign{}
+ID & Method \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+M1 & plain integer DCD-RLS \\
+M2 & ridge integer DCD-RLS \\
+M3 & float64 ridge exponentially weighted LS \\
+M4 & float64 Givens QR-RLS \\
+M5 & NLMS \\
+M6 & standard float64 RLS \\
+\end{longtable}
+
+\textbf{Tuning.} γ ∈ \{0, 2\^{}−8, \ldots, 2\^{}1\} and μ ∈ \{0.05, 0.1,
+0.2, 0.3, 0.5, 0.7, 1.0\} were chosen on the validation epochs. The
+criterion was the mean of pre-switch RRMSE (samples {[}256, 512)) and
+post-switch RRMSE ({[}512, 1024)) {[}S2c:387--388, 411--413{]}.
+
+\textbf{Tests} used held-out post-switch RRMSE, M2 minus the comparator:
+- H1 (vs M1), H3 (vs M5) and H4 (vs M4) pass if the mean paired
+difference is below 0 and the two-sided Wilcoxon p, Holm-adjusted over
+the 18 cells, is below 0.05. - H2 (vs M3) passes if the upper 95\%
+bootstrap CI is below 0.02 × mean(M3).
+
+The bootstrap used 10,000 resamples with seed 42 {[}S2c:728--739,
+762--783{]}.
+
+\hypertarget{e.-stage-3-real-recordings}{%
+\subsection{E. Stage 3: real
+recordings}\label{e.-stage-3-real-recordings}}
+
+\textbf{Data.} 23 PhysioNet motion-artifact EEG records {[}Sweeney 2012;
+PhysioNet dataset{]} were recorded at 2048 Hz. Channel 1 (EEG1, FPz) is
+the reference. Motion was applied at Channel 2 (EEG2, FP1h), 20 mm away
+{[}Sweeney 2012{]}. Records were decimated 4× to 512 Hz with polyphase
+resampling (padtype = ``line'') {[}V2:204--205, 221--222{]}. Trigger
+annotations gave four 60-s artifact intervals per record, 240 s in all
+{[}S3o:12--35{]}.
+
+\textbf{References,} all after Stage A, 16 taps per axis:
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.3333}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.3333}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.3333}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Reference
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Built from
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Taps
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+RefA & ACC\_x1, ACC\_y1, ACC\_z1 & 48 \\
+RefB & ACC\_\emph{1 − ACC\_}2 & 48 \\
+RefC & RefB plus leaky-integrated velocity and position (pole 1 −
+2\^{}−6) & 144 \\
+\end{longtable}
+
+RefC's velocity and position were mean-subtracted over the whole record,
+so RefC is not strictly causal {[}V2:140--145, 228--235{]}.
+
+\textbf{Fixed settings.} γ = 0.125 was frozen from Stage 2 {[}V2:35{]}.
+
+\textbf{NLMS.} Each reference channel was normalised by its standard
+deviation over the calibration window. The update is w ← w + μ·e·u/(uᵀu
++ 10⁻⁴) {[}V2:387, 397{]}.
+
+\textbf{Tuning: leave-one-record-out (LORO).} For each record, P (DCD on
+RefA, then reused for RefB and RefC) or μ was the grid value that
+maximised the mean of ΔSNR\_blocks + ΔSNR\_clean over the other 22
+records {[}V2:458--459, 477--479, 499{]}.
+
+\textbf{Metrics.} ΔSNR is SNR out minus SNR in, relative to EEG1
+{[}Sweeney 2012{]}. It was computed separately over artifact blocks and
+over clean epochs. Correlation improvement and clean-epoch RRMSE were
+also computed {[}V2:419--447{]}.
+
+\textbf{Pre-specified tests.} - P1 tested whether DCD\_RefA exceeded
+NLMS\_RefA in median ΔSNR over artifact blocks. The direction was
+pre-specified; no numeric pass threshold was coded {[}V2:556{]}. - P2
+passes if the upper 95\% CI of the median clean-RRMSE increase of
+DCD\_RefA over NONE is below +0.02 {[}V2:558{]}.
+
+CIs are bootstrap intervals of the median (10,000 resamples, seed 42)
+{[}V2:462--465{]}, and p-values come from two-sided Wilcoxon tests
+{[}V2:553{]}. A sensitivity set of N = 22 excluded eeg\_20, whose
+ACC\_x1 channel had 22\% zero-difference samples {[}S3o:32;
+V2:534--535{]}.
+
+\hypertarget{f.-exploratory-diagnostics-not-pre-specified-p-unadjusted-s4}{%
+\subsection{F. Exploratory diagnostics (not pre-specified; p unadjusted)
+{[}S4{]}}\label{f.-exploratory-diagnostics-not-pre-specified-p-unadjusted-s4}}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{E1:} N\_u ∈ \{4, 8, 16\} × P ∈ \{7, 9, 11\} on DCD\_RefA.
+\item
+  \textbf{E2:} integer DCD vs float64 RLS with the same ridge, and vs
+  near-unregularised float64 RLS (γ = 10⁻⁶), at P ∈ \{5, 7, 9, 11\}.
+\item
+  \textbf{E3:} LORO over P ∈ \{5, 7, 9, 11, 13\}.
+\item
+  \textbf{E4:} trade-off curves over all μ and P on RefA and RefC, with
+  post-hoc paired Wilcoxon tests {[}stage5 script{]}.
+\item
+  \textbf{E5:} LORO selection of P on RefC itself.
+\end{itemize}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\hypertarget{s1b.-claim-to-code-check}{%
+\subsection{S1b. Claim-to-code check}\label{s1b.-claim-to-code-check}}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.3333}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.3333}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.3333}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Claim
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+File:line
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Code on that line (abridged)
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+×16 headroom, skip 2 s & V2:36--37 & \texttt{HEADROOM\ =\ 16.0},
+\texttt{CAL\_START\ =\ 1024} \\
+Stage 3 scale & V2:295 &
+\texttt{np.percentile(np.abs(d\_sig{[}CAL\_START:cal\_len{]}),\ 99.9))\ *\ 1.05\ *\ HEADROOM} \\
+R₀ = 0 (Stage 3) & V2:321 &
+\texttt{R\_q30\ =\ np.zeros((L\_tot,\ L\_tot))} \\
+R₀ = var·I (Stage 2) & S2c:184--185 &
+\texttt{reg\_q30\ =\ max(int(round(delta\_reg\ *\ var\_u\_q15\ *\ Q30)),\ 1)} \\
+δ & V2:326 &
+\texttt{gamma\ *\ var\_u\ *\ (1\ \textless{}\textless{}\ P\_shift)\ *\ Q30} \\
+block shift & V2:346 &
+\texttt{R\_lead\_old\ -\ (R\_lead\_old\ \textgreater{}\textgreater{}\ P\_shift)\ +\ np.outer(u\_q15,\ u\_q15{[}lead\_idx{]})} \\
+leakage / r update & V2:355--356 &
+\texttt{leak\_vec\ =\ ((delta\_q30\ \textgreater{}\textgreater{}\ P\_shift)\ *\ w\_q15)\ \textgreater{}\textgreater{}\ 15} \\
+padtype & V2:204 &
+\texttt{resample\_poly(...,\ 1,\ 4,\ padtype="line")} \\
+RefC non-causal mean & V2:143, 145 & \texttt{vel\ -=\ np.mean(vel)},
+\texttt{pos\ -=\ np.mean(pos)} \\
+grid extension disclosure & V2:479 &
+\texttt{P\_GRID\_DCD\ =\ (5,\ 7,\ 9,\ 11)\ \ \#\ ...\ after\ the\ quick\ run\ picked\ P=9} \\
+LORO = mean & V2:459 &
+\texttt{np.nanmean({[}scores{[}g{]}{[}j{]}\ ...\ if\ j\ !=\ i{]})} \\
+P2 rule & V2:558 &
+\texttt{verdict\ =\ "PASS"\ if\ hi\ \textless{}\ 0.02} \\
+Stage 2 per-epoch scaling & S2c:159 &
+\texttt{np.max(np.abs(d\_sig))\ *\ 1.05} \\
+path filters & R4:290--291 &
+\texttt{butter(3,\ {[}5/(fs/2),\ 100/(fs/2){]})},
+\texttt{butter(3,\ {[}12/(fs/2),\ 75/(fs/2){]})} \\
+−0.8 and switch at 512 & S2c:295--296 &
+\texttt{n2\ =\ -0.8\ *\ lfilter(...)};
+\texttt{np.concatenate({[}n1{[}:512{]},\ n2{[}512:{]}{]})} \\
+2× upsampling, z-score & R4:279--282 &
+\texttt{resample\_poly(eeg\_raw,\ 2,\ 1,\ axis=1)};
+\texttt{R\ /=\ R.std(1)} \\
+H1/H3/H4 rule & S2c:785 &
+\texttt{mean\_d\ \textless{}\ 0.0\ and\ p\_holm\ \textless{}\ 0.05} \\
+H2 rule & S2c:782 & \texttt{ci\_hi\ \textless{}\ margin} (margin =
+0.02·mean(M3)) \\
+max S3 change & S2o:356 & \texttt{Delta=+0.01708} \\
+\end{longtable}
+
+\hypertarget{s2.-stage-2-results-with-line-provenance-stage2-file}{%
+\section{S2. Stage 2 results with line provenance (stage2
+file)}\label{s2.-stage-2-results-with-line-provenance-stage2-file}}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.2000}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.2000}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.2000}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.2000}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.2000}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+H
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Comparison
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Cells passed
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Range of mean difference (M2 − comparator)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+stage2 lines
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+H1 & M2 \textless{} M1 & 18/18 & −0.146 to −0.048 & 215--234 \\
+H2 & M2 non-inferior to M3 (2\% margin) & 8/18 & −0.016 to +0.066 &
+235--254 \\
+H3 & M2 \textless{} M5 (NLMS μ = 0.2) & 17/18 & −0.601 to −0.020
+(failing cell +2 dB, 31.6\%, P = 4; Holm p = 0.233, line 264) &
+255--274 \\
+H4 & M2 \textless{} M4 (QR-RLS) & 18/18 & −0.338 to −0.092 & 275--294 \\
+\end{longtable}
+
+At −7 dB, the ridge raised pre-switch RRMSE relative to plain DCD-RLS in
+the 1\% and 10\% noise cells at both P (e.g., 1.198 → 1.322, lines
+50--51), but lowered it at 31.6\% noise, P = 4 (2.029 → 1.971, lines
+104--105). NLMS had the lowest pre-switch RRMSE in four of the six −7 dB
+cells (all P = 4 cells and P = 5 at 31.6\%; lines 56, 83, 110, 191). At
+P = 5 with 1\% and 10\% noise, plain DCD-RLS was lowest (1.093, 1.219;
+lines 131, 158).
+
+Standard float64 RLS diverged at P = 4 in all 9 cells, with post-switch
+RRMSE 401--1268 (lines 58, 67, 76, 85, 94, 103, 112, 121, 130), and was
+stable at P = 5 (lines 139--211).
+
+Causal validation-set scaling changed held-out post-switch RRMSE by at
+most +0.017 (line 356).
+
+\hypertarget{s3.-full-physionet-results-with-line-provenance}{%
+\section{S3. Full PhysioNet results with line
+provenance}\label{s3.-full-physionet-results-with-line-provenance}}
+
+On the 23 real motion-artifact EEG recordings from PhysioNet (fs = 512
+Hz, L\_ax = 16 taps/axis, Nu = 4, Mb = 16, γ = 0.125 {[}stage3: line
+4{]}; 240 s of induced artifact per record across four 60 s intervals
+{[}stage3: lines 12--35{]}), the primary pre-specified superiority test
+(P1) comparing the integer DCD\_RefA filter (48 total taps, 288
+multiplies per sample for the 48-tap RefA filter, as implemented {[}v2
+code: run\_multichan\_dcd\_ridge\_int, 48 w·u + 144 block-shift R + 48
+e·u + 48 ridge leakage{]}) against NLMS\_RefA on the disturbed
+electrode's 3-axis accelerometer reference failed {[}stage3: line
+106{]}. Across all 23 records under leave-one-record-out (LORO)
+cross-validation (P = 11 selected on 23/23 folds for DCD\_RefA
+{[}stage3: line 64{]}; μ = 0.05 selected on 23/23 folds for NLMS\_RefA
+{[}stage3: line 62{]}), the paired median difference in artifact-block
+SNR change (ΔSNR\_blocks, DCD\_RefA minus NLMS\_RefA) was -2.116 dB
+(95\% bootstrap confidence interval {[}-2.535, -1.971{]} dB, two-sided
+Wilcoxon signed-rank p = 4.8e-7 {[}stage3: line 106{]}), where DCD\_RefA
+had the higher ΔSNR on 1/23 records {[}counted from the per-record
+table, stage3: lines 68--90{]}. The pre-specified clean-EEG preservation
+test (P2) passed: the paired median clean-epoch RRMSE increase
+(DCD\_RefA minus unprocessed NONE) was +0.0145 (95\% CI {[}+0.0107,
++0.0165{]}), with the upper confidence bound below the +0.02
+non-inferiority margin {[}stage3: line 107{]}, whereas NLMS\_RefA at μ =
+0.05 had a median clean-epoch RRMSE increase of +0.0932 (95\% CI
+{[}+0.0667, +0.1053{]}) and failed P2 {[}stage5: line 24{]}. In the N =
+22 sensitivity check excluding record eeg\_20, P1 yielded a median
+difference of -2.105 dB (95\% CI {[}-2.535, -1.918{]} dB) {[}stage3:
+line 127{]} and P2 yielded +0.0146 (95\% CI {[}+0.0107, +0.0170{]})
+{[}stage3: line 128{]}, leaving both verdicts unchanged {[}stage3: lines
+127--128{]}. All subsequent diagnostic analyses (E1--E5) and post-hoc
+comparisons are exploratory (not pre-specified; p unadjusted) {[}stage4:
+lines 35--97; stage5: line 4{]}. In E1, raising the coordinate-update
+limit Nu from 4 to 16 changed median ΔSNR\_blocks by +0.011 dB at P = 11
+{[}stage4: line 353{]}, +0.033 dB at P = 9 {[}stage4: line 268{]}, and
++0.131 dB at P = 7 {[}stage4: line 183{]}, showing that the per-sample
+update budget does not limit DCD\_RefA at the selected operating point.
+In E2, comparing integer DCD\_RefA against float64 ridge RLS with the
+identical ridge load gave median ΔSNR\_blocks differences (integer DCD
+minus float64 ridge RLS) of -0.010 dB at P = 11 {[}stage4: line 483{]},
+-0.039 dB at P = 9 {[}stage4: line 451{]}, -0.210 dB at P = 7 {[}stage4:
+line 419{]}, and -1.150 dB at P = 5 {[}stage4: line 387{]}, while the
+ridge load improved upon near-unregularised float64 RLS at every P on
+23/23 records across both artifact blocks and clean epochs {[}stage4:
+lines 388--389, 420--421, 452--453, 484--485{]}. In E3, extending the
+memory grid to P = 13 produced a lower mean LORO score (+0.282 at P = 13
+versus +1.043 at P = 11) {[}stage4: lines 491--492{]}, and LORO still
+selected P = 11 on 23/23 folds {[}stage4: line 493{]}. Across the E4
+trade-off curves on RefA (Fig. 1a; {[}stage4: lines 498--510{]};
+{[}stage5: lines 16--26{]}), median ΔSNR\_blocks / ΔSNR\_clean for
+DCD\_RefA moved from +4.75 / -5.33 dB at P = 5 {[}stage5: line 16{]}, to
++3.05 / -2.83 dB at P = 7 {[}stage5: line 17{]}, +1.78 / -0.99 dB at P =
+9 {[}stage5: line 18{]}, +1.15 / -0.31 dB at P = 11 {[}stage5: line
+19{]}, and +0.78 / -0.42 dB at P = 13 {[}stage5: line 20{]}, whereas
+NLMS\_RefA across μ in \{0.005, 0.01, 0.02, 0.05, 0.1, 0.2\} spanned
++1.42 / -0.28 dB ({[}stage5: line 21{]}), +1.82 / -0.43 dB ({[}stage5:
+line 22{]}), +2.60 / -0.85 dB ({[}stage5: line 23{]}), +3.71 / -1.75 dB
+({[}stage5: line 24{]}), +4.39 / -2.81 dB ({[}stage5: line 25{]}), and
++5.10 / -4.20 dB ({[}stage5: line 26{]}). On median values, every
+NLMS\_RefA operating point lies on the joint frontier and no DCD\_RefA
+point does {[}stage4: lines 498--510{]}; at the two settings that passed
+P2 (NLMS μ = 0.005, DCD P = 11), paired differences were not significant
+(p = 0.16 artifact blocks, p = 0.111 clean epochs) {[}stage5: lines
+5--6{]}. On the 9-axis RefC reference (Fig. 1b; {[}stage4: lines
+512--524{]}; {[}stage5: lines 27--37{]}), DCD\_RefC at P = 11 (+3.28 /
+-0.76 dB, clean-RRMSE increase +0.0443 {[}+0.0310, +0.0498{]} {[}stage5:
+line 30{]}) and P = 13 (+2.35 / -0.74 dB, +0.0367 {[}+0.0184, +0.0526{]}
+{[}stage5: line 31{]}) lie on the joint median frontier at the
+low-damage end {[}stage4: lines 512--524{]}, though no RefC operating
+point passes the +0.02 P2 margin {[}stage5: lines 27--37{]}. Post-hoc
+paired Wilcoxon signed-rank tests (two-sided, unadjusted) for DCD\_RefC
+at P = 11 minus NLMS\_RefC at μ = 0.005 (+2.65 / -0.84 dB, clean-RRMSE
+increase +0.0428 {[}+0.0263, +0.0572{]} {[}stage5: line 32{]}) showed no
+statistically significant difference on artifact blocks (+0.0260 dB,
+95\% CI {[}-0.1933, +0.2397{]} dB, 12/23 records, p = 0.687 {[}stage5:
+line 8{]}), clean epochs (+0.0156 dB, 95\% CI {[}-0.0703, +0.0983{]} dB,
+12/23 records, p = 0.622 {[}stage5: line 9{]}), or clean RRMSE (-0.0016,
+95\% CI {[}-0.0055, +0.0027{]}, 10/23 records, p = 0.315 {[}stage5: line
+10{]}), whereas DCD\_RefC at P = 13 trailed NLMS\_RefC at μ = 0.005 on
+artifact blocks by -0.7085 dB (95\% CI {[}-0.8954, -0.3440{]} dB, 4/23
+records, p = 0.00915 {[}stage5: line 11{]}) with clean-epoch differences
+of +0.0125 dB (95\% CI {[}-0.2581, +0.2204{]} dB, 12/23 records, p =
+0.777 {[}stage5: line 12{]}) and -0.0004 RRMSE (95\% CI {[}-0.0113,
++0.0161{]}, 11/23 records, p = 0.964 {[}stage5: line 13{]}). When P was
+tuned directly on RefC via LORO (E5), LORO selected P = 5 or 7
+{[}stage4: line 1037{]}, and DCD\_RefC minus NLMS\_RefC yielded a median
+difference of -1.088 dB over artifact blocks (DCD\_RefC had the higher
+ΔSNR on 6/23 records) and -1.073 dB over clean epochs (0/23 records)
+{[}stage4: lines 1039--1040{]}.
+
+\hypertarget{s4.-verification-table-every-physionet-number-against-its-source-line}{%
+\section{S4. Verification table: every PhysioNet number against its
+source
+line}\label{s4.-verification-table-every-physionet-number-against-its-source-line}}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.4849}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.2199}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.2952}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Number / Value in Text}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Context in Text}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Exact Source File \& Line Citation}
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+23 records & Number of PhysioNet EEG recordings evaluated & {[}stage3:
+lines 12--35, 106{]}, {[}stage5: line 5{]} \\
+fs = 512 Hz, L\_ax = 16, Nu = 4, Mb = 16, γ = 0.125 & Primary DCD\_RefA
+configuration and decimated rate & {[}stage3: line 4{]} \\
+240 s of artifact in four 60 s intervals per record & Induced artifact
+duration per record & {[}stage3: lines 12--35{]} \\
+288 multiplies/sample for the 48-tap RefA filter (48 w·u + 144
+block-shift R + 48 e·u + 48 ridge leakage) & Per-sample multiply count
+of run\_multichan\_dcd\_ridge\_int on 3-axis RefA & {[}v2 code:
+run\_multichan\_dcd\_ridge\_int, 48 w·u + 144 block-shift R + 48 e·u +
+48 ridge leakage{]} \\
+μ = 0.05 on 23/23 folds & Pre-registered LORO selection for NLMS\_RefA &
+{[}stage3: line 62{]} \\
+P = 11 on 23/23 folds (in P1 sentence) & Pre-registered LORO selection
+for DCD\_RefA & {[}stage3: line 64{]} \\
+-2.116 dB, {[}-2.535, -1.971{]} dB, p = 4.8e-7 & Pre-registered P1
+(DCD\_RefA - NLMS\_RefA ΔSNR\_blocks) & {[}stage3: line 106{]} \\
+1/23 records & Records where DCD\_RefA had higher ΔSNR\_blocks than
+NLMS\_RefA & {[}counted from the per-record table, stage3: lines
+68--90{]} \\
++0.0145, {[}+0.0107, +0.0165{]}, margin +0.02 & Pre-registered P2
+(DCD\_RefA - NONE clean RRMSE) & {[}stage3: line 107{]}, {[}stage5: line
+19{]} \\
++0.0932, {[}+0.0667, +0.1053{]} & NLMS\_RefA (μ = 0.05) clean-epoch
+RRMSE increase vs NONE & {[}stage5: line 24{]} \\
+N = 22, -2.105 dB, {[}-2.535, -1.918{]} dB (P1); +0.0146, {[}+0.0107,
++0.0170{]} (P2) & Sensitivity check excluding eeg\_20 & {[}stage3: lines
+127--128{]} \\
+Lines 35--97 & All stage4 self-checks passed & {[}stage4: lines
+35--97{]} \\
+Nu = 4 to 16: +0.011 dB (P=11), +0.033 dB (P=9), +0.131 dB (P=7) & E1
+update-budget sweep on DCD\_RefA & {[}stage4: lines 183, 268, 353{]} \\
+-0.010 dB (P=11), -0.039 dB (P=9), -0.210 dB (P=7), -1.150 dB (P=5) & E2
+integer DCD minus float64 ridge RLS (≤ 0.04 dB at P ≥ 9) & {[}stage4:
+lines 387, 419, 451, 483{]} \\
+23/23 records at P in \{5, 7, 9, 11\} & E2 ridge RLS vs
+near-unregularised float64 RLS & {[}stage4: lines 388--389, 420--421,
+452--453, 484--485{]} \\
++0.282 (P = 13) vs +1.043 (P = 11); P = 11 on 23/23 folds & E3 grid
+extension to P = 13 & {[}stage4: lines 491--493{]} \\
++4.75 / -5.33 dB (P=5), +3.05 / -2.83 dB (P=7), +1.78 / -0.99 dB (P=9),
++1.15 / -0.31 dB (P=11), +0.78 / -0.42 dB (P=13) & E4 DCD\_RefA median
+ΔSNR\_blocks / ΔSNR\_clean & {[}stage4: lines 498--510{]}, {[}stage5:
+lines 16--20{]} \\
++1.42 / -0.28 dB (μ=0.005), +1.82 / -0.43 dB (μ=0.01), +2.60 / -0.85 dB
+(μ=0.02), +3.71 / -1.75 dB (μ=0.05), +4.39 / -2.81 dB (μ=0.1), +5.10 /
+-4.20 dB (μ=0.2) & E4 NLMS\_RefA median ΔSNR\_blocks / ΔSNR\_clean &
+{[}stage4: lines 498--510{]}, {[}stage5: lines 21--26{]} \\
++0.0121, {[}+0.0099, +0.0161{]} & NLMS\_RefA (μ = 0.005) clean-RRMSE
+increase (P2 pass) & {[}stage5: line 21{]} \\
+506 rows (lines 527--1033) & E4 CSV block in stage4\_stdout.txt &
+{[}stage4: lines 527--1033{]}, {[}stage5: line 1{]} \\
++0.0797 dB, p=0.16 & Post-hoc NLMS\_RefA (μ=0.005) - DCD\_RefA (P=11),
+blocks & {[}stage5: line 5{]} \\
++0.0379 dB, p=0.111 & Post-hoc NLMS\_RefA (μ=0.005) - DCD\_RefA (P=11),
+clean & {[}stage5: line 6{]} \\
+-0.0017, p=0.134 & Post-hoc NLMS\_RefA (μ=0.005) - DCD\_RefA (P=11),
+clean RRMSE & {[}stage5: line 7{]} \\
++3.28 / -0.76 dB, +0.0443 {[}+0.0310, +0.0498{]} & DCD\_RefC (P = 11)
+medians and clean-RRMSE CI & {[}stage4: lines 512--524{]}, {[}stage5:
+line 30{]} \\
++2.35 / -0.74 dB, +0.0367 {[}+0.0184, +0.0526{]} & DCD\_RefC (P = 13)
+medians and clean-RRMSE CI & {[}stage4: lines 512--524{]}, {[}stage5:
+line 31{]} \\
++2.65 / -0.84 dB, +0.0428 {[}+0.0263, +0.0572{]} & NLMS\_RefC (μ =
+0.005) medians and clean-RRMSE CI & {[}stage4: lines 512--524{]},
+{[}stage5: line 32{]} \\
++0.0260 dB, p=0.687 & Post-hoc DCD\_RefC (P=11) - NLMS\_RefC (μ=0.005),
+blocks & {[}stage5: line 8{]} \\
++0.0156 dB, p=0.622 & Post-hoc DCD\_RefC (P=11) - NLMS\_RefC (μ=0.005),
+clean & {[}stage5: line 9{]} \\
+-0.0016, p=0.315 & Post-hoc DCD\_RefC (P=11) - NLMS\_RefC (μ=0.005),
+clean RRMSE & {[}stage5: line 10{]} \\
+-0.7085 dB, p=0.00915 & Post-hoc DCD\_RefC (P=13) - NLMS\_RefC
+(μ=0.005), blocks & {[}stage5: line 11{]} \\
++0.0125 dB, p=0.777 & Post-hoc DCD\_RefC (P=13) - NLMS\_RefC (μ=0.005),
+clean & {[}stage5: line 12{]} \\
+-0.0004, p=0.964 & Post-hoc DCD\_RefC (P=13) - NLMS\_RefC (μ=0.005),
+clean RRMSE & {[}stage5: line 13{]} \\
+P = 5 or 7; -1.088 dB blocks (6/23); -1.073 dB clean (0/23) & E5 direct
+LORO on RefC & {[}stage4: lines 1037, 1039--1040{]} \\
+17/18 cells (H3) & Stage 2 semi-synthetic EEGdenoiseNet step-switch
+benchmark advantage & {[}stage2\_round6\_ridge\_stdout.txt: H3{]} \\
+EEG1 at FPz, EEG2 at FP1h, 20 mm spacing, motion induced at Channel 2 &
+Electrode montage and disturbance protocol & Sweeney et al.~(2012, IEEE
+TITB 16(5):918--926, doi:10.1109/TITB.2012.2207400) \\
+0.414 (median) & Unprocessed (NONE) clean-epoch RRMSE of EEG2 vs EEG1 &
+{[}stage4: line 498{]} \\
+0.64 Hz (P\_hp = 7 at 512 Hz), -4.17 dB at 0.5 Hz & Stage A high-pass
+attenuation & {[}stage3: line 9{]} \\
+Below -4.7 dB (-6.48 dB at P=5; -4.72 dB at P=7) & Clean-epoch ΔSNR of
+DCD\_RefC at P = 5 and P = 7 & {[}stage4: lines 520--521{]}, {[}stage5:
+lines 27--28{]} \\
+\end{longtable}
+
+\end{document}
